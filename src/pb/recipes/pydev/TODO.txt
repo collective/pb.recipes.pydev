@@ -1,0 +1,5 @@
+TODO
+----
+There are a couple of gotchas: the `.pydevproject` file is overwritten, the
+proper way to do this would be to parse the xml file with something like minidom
+and replace the nodes with the proper content.
