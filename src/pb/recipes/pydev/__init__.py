@@ -10,7 +10,7 @@ class PyDev(object):
                                        os.path.join(wd, '.pydevproject'))
         self._python = options.get('target_python', 'python2.4')
         self._extra_paths = options.get('extra_paths', '').split('\n')
-        self._app_eggs = options['eggs'].split('\n')
+        self._app_eggs = filter( None, options['eggs'].split('\n') )
 
     def install(self):
         egg = zc.recipe.egg.Egg(self.buildout, self.name, self.options)
