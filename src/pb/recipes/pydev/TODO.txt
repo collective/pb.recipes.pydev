@@ -1,14 +1,4 @@
 TODO
 ----
-There are a couple of gotchas: the `.pydevproject` file is overwritten, the
-proper way to do this would be to parse the xml file with something like minidom
-and replace the nodes with the proper content.
-
-At the moment the handling of the "source paths" is very shitty. I've tried to
-fix it (but it stills fails for some of my projects), but I think it's a lot 
-better to let Eclipse handle this part. I think the best way is to parse the 
-.pydevproject file and write the node with the name
-"org.python.pydev.PROJECT_EXTERNAL_SOURCE_PATH". This will solve all the issues
-that I might have with this project. That and allowing additional paths to be
-written in buildout as optionals that are not handled through the egg dependency
-mechanism.
+Don't write the project's source path in external paths, Eclipse has this
+covered.

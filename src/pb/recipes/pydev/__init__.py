@@ -1,13 +1,14 @@
-from xml.dom.minidom import parse, parseString
+from xml.dom import minidom, pulldom
+import logging
 import os
-import zc.recipe.egg 
+import zc.recipe.egg
 
 class PyDev(object):
     def __init__(self, buildout, name, options):
         self.buildout, self.name, self.options = buildout, name, options
         wd = self.buildout['buildout']['directory']
 
-        self._fpath = self.options.get('pydevproject_path', 
+        self._fpath = self.options.get('pydevproject_path',
                                        os.path.join(wd, '.pydevproject'))
         self._python = options.get('target_python', 'python2.4')
         self._extra_paths = options.get('extra_paths', '').split('\n')
@@ -18,21 +19,24 @@ class PyDev(object):
         egg_names, ws = egg.working_set(self._app_eggs)
         egg_paths = ws.entries + self._extra_paths
         egg_paths = [p for p in egg_paths if p.strip() != '']   #strip empty paths
-        
-        pydev_dom = parse(self._fpath)
-        nodes = pydev_dom.getElementsByTagName('pydev_pathproperty')
-        prop = filter( lambda node: (node.getAttribute('name') == 
+
+        document = minidom.parse(self._fpath)
+
+        nodes = document.getElementsByTagName('pydev_pathproperty')
+        prop_node = filter(lambda node: (node.getAttribute('name') ==
                             'org.python.pydev.PROJECT_EXTERNAL_SOURCE_PATH'),
                        nodes
                    )[0]
-        clone = prop.cloneNode(False)
+
+        for child in prop_node.childNodes:
+            prop_node.removeChild(child)
 
         for p in egg_paths:
-            node = pydev_dom.createElement('path')
-            node.appendChild(pydev_dom.createTextNode(p))
-            clone.appendChild(node)
-            
-        open(self._fpath, 'w').write(pydev_dom.toxml())
+            node = document.createElement('path')
+            node.appendChild(document.createTextNode(p))
+            prop_node.appendChild(node)
+
+        open(self._fpath, 'w').write(document.toprettyxml())
         return self._fpath
 
     update = install
