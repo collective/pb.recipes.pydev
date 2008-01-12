@@ -3,10 +3,6 @@ pb.recipes.pydev
 
 Author: Tiberiu Ichim, tibi@pixelblaster.ro
 
-WARNING: this recipe overwrites the .pydevproject file with a simplistic version,
-make a backup or fix/extend the recipe to properly handle the file. For the
-moment, it does everything I need.
-
     >>> import os
 
 This recipe is about generating a `.pydevproject` file, which is used by Eclipse
