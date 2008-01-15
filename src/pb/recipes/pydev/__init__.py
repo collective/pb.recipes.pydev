@@ -55,16 +55,3 @@ class PyDev(object):
         return self._fpath
 
     update = install
-
-template = """<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?eclipse-pydev version="1.0"?>
-<pydev_project>
-<pydev_pathproperty name="org.python.pydev.PROJECT_EXTERNAL_SOURCE_PATH">
-%(paths)s
-</pydev_pathproperty>
-<pydev_pathproperty name="org.python.pydev.PROJECT_SOURCE_PATH">
-%(src_path)s
-</pydev_pathproperty>
-<pydev_property name="org.python.pydev.PYTHON_PROJECT_VERSION">%(target_python)s</pydev_property>
-</pydev_project>
-"""
