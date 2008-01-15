@@ -17,8 +17,7 @@ class PyDev(object):
 
         self._fpath = self.options.get('pydevproject_path',
                                        os.path.join(wd, '.pydevproject'))
-        self._backup_path = self.options.get('pydevproject_path',
-                                       os.path.join(wd, '.pydevproject.bak'))
+        self._backup_path = "%s.bak" % self._fpath
         self._python = options.get('target_python', 'python2.4')
         self._extra_paths = options.get('extra_paths', '').split('\n')
         self._app_eggs = filter(None, options['eggs'].split('\n'))
@@ -39,19 +38,18 @@ class PyDev(object):
                             'org.python.pydev.PROJECT_EXTERNAL_SOURCE_PATH'),
                        nodes
                    )[0]
-
-        for child in prop_node.childNodes:
-            prop_node.removeChild(child)
+        clone = prop_node.cloneNode(False)
 
         for p in egg_paths:
             node = document.createElement('path')
             node.appendChild(document.createTextNode(p))
-            prop_node.appendChild(node)
-        try:
-            shutil.copy(self._fpath, self._backup_path) #make a copy of the file
-        except:
-            pass    #XXX: this should be logged probably
+            clone.appendChild(node)
+
+        parent = prop_node.parentNode
+        parent.replaceChild(clone, prop_node)
+
+        shutil.copy(self._fpath, self._backup_path) #make a copy of the file
         open(self._fpath, 'w').write(document.toxml())
-        return self._fpath
+        return ""
 
     update = install

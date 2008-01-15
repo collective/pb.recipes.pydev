@@ -92,6 +92,12 @@ shouldn't affect Eclipse.
     >>> pydev_egg_src in data
     True
 
+In version 0.2 the paths were added twice, let's check that this doesn't happen
+anymore:
+
+    >>> data.count('zc.recipe.egg')
+    1
+
 Almost all options of this recipe for the buildout.cfg are optional. The only
 one required is the `eggs` option. A sample zope3 instance buildout, with the
 pydev recipe could be something like this:
