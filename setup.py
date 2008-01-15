@@ -6,8 +6,10 @@ entry_points = {'zc.buildout':['default = %s:PyDev' % name]}
 
 setup (
     name='pb.recipes.pydev',
-    version='0.1',
-    author = "Pixelblaster",
+    description="A zc.buildout recipe that writes egg dependencies in an "
+                "Eclipse Pydev .pydevproject file",
+    version='0.2',
+    author = "Tiberiu Ichim - Pixelblaster SRL",
     author_email = "tibi@pixelblaster.ro",
     license = "BSD",
     keywords = "buildout recipe PyDev eclipse",
