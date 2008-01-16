@@ -1,4 +1,3 @@
 TODO
 ----
-Don't write the project's source path in external paths, Eclipse has this
-covered.
+Detect missing external path xml node, for a new project Eclipse doesn't write this.
