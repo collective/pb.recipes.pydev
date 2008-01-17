@@ -11,7 +11,10 @@ setup (
 location. This file will contain paths of all the eggs of the current zope
 instance + any other paths specified in the buildout.cfg file. After running
 the buildout you'll have to close and reopen the Eclipse project, to regenerate
-the project's module indexes.""",
+the project's module indexes.
+
+Change in 0.4: no longer crash when dealing with .pydevproject files with no external source folder node.
+""",
     version='0.4',
     author = "Tiberiu Ichim - Pixelblaster SRL",
     author_email = "tibi@pixelblaster.ro",
