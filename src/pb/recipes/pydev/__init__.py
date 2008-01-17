@@ -32,21 +32,26 @@ class PyDev(object):
         egg_paths = filter(lambda p: p not in self._ignored_paths, egg_paths)
 
         document = minidom.parse(self._fpath)
+        project_node = document.getElementsByTagName('pydev_project')[0]
 
         nodes = document.getElementsByTagName('pydev_pathproperty')
-        prop_node = filter(lambda node: (node.getAttribute('name') ==
+        prop_nodes = filter(lambda node: (node.getAttribute('name') ==
                             'org.python.pydev.PROJECT_EXTERNAL_SOURCE_PATH'),
                        nodes
-                   )[0]
-        clone = prop_node.cloneNode(False)
+                   )
+        for node in prop_nodes: #delete the PROJECT_EXTERNAL_SOURCE_PATH node
+            project_node.removeChild(node)
+
+        ext_node = document.createElement('pydev_pathproperty')
+        ext_node.setAttribute('name',
+                              'org.python.pydev.PROJECT_EXTERNAL_SOURCE_PATH')
 
         for p in egg_paths:
             node = document.createElement('path')
             node.appendChild(document.createTextNode(p))
-            clone.appendChild(node)
+            ext_node.appendChild(node)
 
-        parent = prop_node.parentNode
-        parent.replaceChild(clone, prop_node)
+        project_node.appendChild(ext_node)
 
         shutil.copy(self._fpath, self._backup_path) #make a copy of the file
         open(self._fpath, 'w').write(document.toxml())

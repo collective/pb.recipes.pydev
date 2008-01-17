@@ -98,6 +98,41 @@ anymore:
     >>> data.count('zc.recipe.egg')
     1
 
+In version 0.3, the recipe would fail with a .pydevproject file with no external
+source path node, let's check this doesn't happen anymore:
+
+    >>> fc = """<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+    ... <?eclipse-pydev version="1.0"?>
+    ... <pydev_project>
+    ... <pydev_pathproperty name="org.python.pydev.PROJECT_SOURCE_PATH">
+    ... <path>/pb.recipes.pydev/src</path>
+    ... </pydev_pathproperty>
+    ... </pydev_project>"""
+    >>> pf_path = os.path.join(sample_buildout, '.pydevproject_test')
+    >>> f = open(pf_path, 'w')
+    >>> f.write(fc)
+    >>> f.close()
+    >>> print system(buildout) #doctest: +NORMALIZE_WHITESPACE
+    Updating pydev.
+    >>> import os
+    >>> from xml.dom import minidom
+    >>> document = minidom.parse(os.path.join(sample_buildout,
+    ...                             '.pydevproject_test'))
+    >>> nodes = document.getElementsByTagName('pydev_pathproperty')
+    >>> paths_node = filter(lambda node: (node.getAttribute('name') ==
+    ...                     'org.python.pydev.PROJECT_EXTERNAL_SOURCE_PATH'),
+    ...                nodes
+    ...             )[0]
+    >>> data = paths_node.toxml()
+    >>> '/something/else' in data
+    True
+    >>> 'zc.recipe.egg' in data
+    True
+    >>> 'zc.buildout' in data
+    True
+    >>> 'setuptools' in data
+    True
+
 Almost all options of this recipe for the buildout.cfg are optional. The only
 one required is the `eggs` option. A sample zope3 instance buildout, with the
 pydev recipe could be something like this:

@@ -1,3 +1,4 @@
 TODO
 ----
-Detect missing external path xml node, for a new project Eclipse doesn't write this.
+Make sure the project src path doesn't appear as external path in the generated
+file
