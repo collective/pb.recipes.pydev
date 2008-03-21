@@ -21,10 +21,11 @@ class PyDev(object):
         self._python = options.get('target_python', 'python2.4')
         self._extra_paths = options.get('extra_paths', '').split('\n')
         self._app_eggs = filter(None, options['eggs'].split('\n'))
+        self.egg = zc.recipe.egg.Egg(self.buildout, self.name, self.options)
 
     def install(self):
-        egg = zc.recipe.egg.Egg(self.buildout, self.name, self.options)
-        egg_names, ws = egg.working_set(self._app_eggs)
+        #egg_names, ws = egg.working_set(self._app_eggs)
+        requirements, ws = self.egg.working_set()
         egg_paths = ws.entries + self._extra_paths
         egg_paths = [p for p in egg_paths if p.strip() != '']   #strip empty paths
 

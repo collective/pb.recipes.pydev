@@ -9,7 +9,9 @@ This recipe is about generating a `.pydevproject` file, which is used by Eclipse
 and PyDev to hold a list of folders which hold Python packages (for code
 completition, auto-import and so on). The idea is to fill this file with paths
 pointing to the used egg folders. Although this recipe is written with a zope3
-instance in mind, it can probably be used for any other scenario.
+instance in mind, it can probably be used for any other scenario. After running
+the buildout you'll have to close and reopen the Eclipse project, to regenerate
+the project's module indexes.
 
 A full recipe would include the following options:
 
