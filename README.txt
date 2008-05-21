@@ -1,3 +1,4 @@
+================
 pb.recipes.pydev
 ================
 
@@ -8,19 +9,19 @@ close and reopen the Eclipse project, to regenerate the project's module indexes
 
 Almost all options of this recipe for the buildout.cfg are optional. The only
 one required is the `eggs` option. A sample zope3 instance buildout, with the
-pydev recipe could be something like this:
+pydev recipe could be something like this::
 
-[buildout]
-develop = .
-parts = instance pydev
+    [buildout]
+    develop = .
+    parts = instance pydev
 
-[sample-app]
-recipe = zc.zope3recipes:app
-eggs = something [app, third_party]
+    [sample-app]
+    recipe = zc.zope3recipes:app
+    eggs = something [app, third_party]
 
-[pydev]
-recipe = pb.recipes.pydev
-eggs = ${sample-app:eggs}
+    [pydev]
+    recipe = pb.recipes.pydev
+    eggs = ${sample-app:eggs}
 
-Read the README.txt doctest inside the source code for further info about the 
-options.
+For Plone integration and further configuration options, read the README.txt 
+doctest inside the source code.

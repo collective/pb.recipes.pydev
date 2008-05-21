@@ -1,32 +1,44 @@
 pb.recipes.pydev
 ================
 
+.. contents::
+
 Author: Tiberiu Ichim, tibi@pixelblaster.ro
+
+Overview
+********
+
+This recipe is about modifying a `.pydevproject` file, which is used by Eclipse
+and PyDev to hold a list of folders which hold Python packages (for code
+completition, auto-import and so on). This recipe won't generate a new one! 
+If you're running the buildout directly in the PyDev project, you're all set,
+otherwise you have to set the path to the .pydevproject file.
+
+The idea is to fill this file with paths pointing to the used egg folders. 
+Although this recipe is written with a zope3 instance in mind, it can probably 
+be used for any other scenario (read integration.txt for details on how to use 
+with Plone). After running the buildout you'll have to close and reopen the 
+Eclipse project (refreshing the source code might also work), to regenerate 
+the project's module indexes.
+
+How it works
+************
 
     >>> import os
 
-This recipe is about generating a `.pydevproject` file, which is used by Eclipse
-and PyDev to hold a list of folders which hold Python packages (for code
-completition, auto-import and so on). The idea is to fill this file with paths
-pointing to the used egg folders. Although this recipe is written with a zope3
-instance in mind, it can probably be used for any other scenario. After running
-the buildout you'll have to close and reopen the Eclipse project, to regenerate
-the project's module indexes.
-
 A full recipe would include the following options:
 
-	>>> write(sample_buildout, 'buildout.cfg',
-	... """
-	... [buildout]
-	... parts = pydev
-	...
-	... [pydev]
-	... recipe = pb.recipes.pydev
-	... pydevproject_path = ${buildout:directory}/.pydevproject_test
-	... extra_paths = /something/else
-	... target_python = python2.4
-	... eggs = pb.recipes.pydev
-	... """)
+    >>> write(sample_buildout, 'buildout.cfg',
+    ... """
+    ... [buildout]
+    ... parts = pydev
+    ...
+    ... [pydev]
+    ... recipe = pb.recipes.pydev
+    ... pydevproject_path = ${buildout:directory}/.pydevproject_test
+    ... extra_paths = /something/else
+    ... eggs = pb.recipes.pydev
+    ... """)
 
 We need a working .pydevproject file. This recipe won't generate a new one.
 I'll use this project's project file for testing.
@@ -50,17 +62,17 @@ I'll use this project's project file for testing.
 
 Now we can run the buildout
 
-	>>> print system(buildout) #doctest: +NORMALIZE_WHITESPACE
-	Installing pydev.
+    >>> print system(buildout) #doctest: +NORMALIZE_WHITESPACE
+    Installing pydev.
 
 With this recipe we only override the external source paths entry, so we'll only
 check that:
 
-	>>> import os
-	>>> from xml.dom import minidom
-	>>> document = minidom.parse(os.path.join(sample_buildout,
-	...                             '.pydevproject_test'))
-	>>> nodes = document.getElementsByTagName('pydev_pathproperty')
+    >>> import os
+    >>> from xml.dom import minidom
+    >>> document = minidom.parse(os.path.join(sample_buildout,
+    ...                             '.pydevproject_test'))
+    >>> nodes = document.getElementsByTagName('pydev_pathproperty')
     >>> paths_node = filter(lambda node: (node.getAttribute('name') ==
     ...                     'org.python.pydev.PROJECT_EXTERNAL_SOURCE_PATH'),
     ...                nodes
@@ -69,8 +81,8 @@ check that:
 
 The paths should contain what we have specified int eh the `extra_paths` option:
 
-	>>> '/something/else' in data
-	True
+    >>> '/something/else' in data
+    True
 
 In our sample buildout.cfg we have placed, in the `eggs` option, this recipe's
 egg. In your projects, this can be anything, (and it should be your developing
@@ -134,19 +146,3 @@ source path node, let's check this doesn't happen anymore:
     True
     >>> 'setuptools' in data
     True
-
-Almost all options of this recipe for the buildout.cfg are optional. The only
-one required is the `eggs` option. A sample zope3 instance buildout, with the
-pydev recipe could be something like this:
-
-[buildout]
-develop = .
-parts = instance pydev
-
-[sample-app]
-recipe = zc.zope3recipes:app
-eggs = something [app, third_party]
-
-[pydev]
-recipe = pb.recipes.pydev
-eggs = ${sample-app:eggs}
