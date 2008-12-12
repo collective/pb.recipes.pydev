@@ -35,7 +35,7 @@ class PyDev(object):
         if not os.path.exists(self._fpath):
             logging.warning("Could not find .pydevproject file. Ignore this "
                             "message if you're not using Eclipse Pydev")
-            return
+            return ""
         
         document = minidom.parse(self._fpath)
         project_node = document.getElementsByTagName('pydev_project')[0]
