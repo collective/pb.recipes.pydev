@@ -1,6 +1,10 @@
 Change History
 ==============
 
+Version 0.4.3
+-------------
+- Don't trigger an error if the .pydevproject file is missing
+
 Version 0.4.2
 -------------
 - Add documentation on Plone integration

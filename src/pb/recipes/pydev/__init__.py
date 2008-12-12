@@ -1,7 +1,7 @@
 from xml.dom import minidom, pulldom
-import shutil
 import logging
 import os
+import shutil
 import zc.recipe.egg
 
 class PyDev(object):
@@ -11,7 +11,7 @@ class PyDev(object):
 
         res = []
         develop_locations = self.buildout['buildout']['directory']
-        for path in develop_locations:
+        for _path in develop_locations:
             res.append(os.path.normpath(os.path.join(wd, './src')))
         self._ignored_paths = res
 
@@ -25,13 +25,18 @@ class PyDev(object):
 
     def install(self):
         #egg_names, ws = egg.working_set(self._app_eggs)
-        requirements, ws = self.egg.working_set()
+        _reqs, ws = self.egg.working_set()
         egg_paths = ws.entries + self._extra_paths
         egg_paths = [p for p in egg_paths if p.strip() != '']   #strip empty paths
 
         #strip develop paths,they're probably in Eclipse source path
         egg_paths = filter(lambda p: p not in self._ignored_paths, egg_paths)
-
+        
+        if not os.path.exists(self._fpath):
+            logging.warning("Could not find .pydevproject file. Ignore this "
+                            "message if you're not using Eclipse Pydev")
+            return
+        
         document = minidom.parse(self._fpath)
         project_node = document.getElementsByTagName('pydev_project')[0]
 
@@ -56,6 +61,7 @@ class PyDev(object):
 
         shutil.copy(self._fpath, self._backup_path) #make a copy of the file
         open(self._fpath, 'w').write(document.toxml())
+            
         return ""
 
     update = install
