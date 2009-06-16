@@ -37,6 +37,7 @@ A full recipe would include the following options:
     ... recipe = pb.recipes.pydev
     ... pydevproject_path = ${buildout:directory}/.pydevproject_test
     ... extra_paths = /something/else
+    ... remote_path = /media/my_share/my_project
     ... eggs = pb.recipes.pydev
     ... """)
 
@@ -104,6 +105,10 @@ shouldn't affect Eclipse.
     ...                          len('/src/pb/recipes/pydev/README.txt')]
     >>> pydev_egg_src = os.path.join(code_path, 'src')
     >>> pydev_egg_src in data
+    True
+
+Eggs are sub-folders of remote_path, so Eclipse will be able to find them threw network shares.
+    >>> '/media/my_share/my_project' in data
     True
 
 In version 0.2 the paths were added twice, let's check that this doesn't happen

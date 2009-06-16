@@ -9,6 +9,8 @@ class PyDev(object):
         self.buildout, self.name, self.options = buildout, name, options
         wd = self.buildout['buildout']['directory']
 
+        self._remote_path = self.options.get('remote_path', None)
+
         res = []
         develop_locations = self.buildout['buildout']['directory']
         for _path in develop_locations:
@@ -28,6 +30,14 @@ class PyDev(object):
         _reqs, ws = self.egg.working_set()
         egg_paths = ws.entries + self._extra_paths
         egg_paths = [p for p in egg_paths if p.strip() != '']   #strip empty paths
+        
+        # relocate eggs so paths are valid on remote computers (via nfs, smb, ...)
+        if self._remote_path is not None:
+            prefix = self.buildout['buildout']['directory']
+            prefix_length = len(prefix)
+            egg_paths = [p.startswith(prefix) and \
+                            '%s%s'%(self._remote_path, p[prefix_length:]) or p \
+                         for p in egg_paths]
 
         #strip develop paths,they're probably in Eclipse source path
         egg_paths = filter(lambda p: p not in self._ignored_paths, egg_paths)
