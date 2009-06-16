@@ -18,7 +18,7 @@ setup (
                         + "\n\n" +
                         read('CHANGES.txt')
     ), 
-    version='0.4.3', 
+    version='0.4.4', 
     author = "Tiberiu Ichim - Pixelblaster SRL", 
     author_email = "tibi@pixelblaster.ro", 
     license = "BSD", 
