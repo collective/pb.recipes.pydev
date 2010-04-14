@@ -36,7 +36,7 @@ A full recipe would include the following options:
     ... [pydev]
     ... recipe = pb.recipes.pydev
     ... pydevproject_path = ${buildout:directory}/.pydevproject_test
-    ... extra_paths = /something/else
+    ... extra-paths = /something/else
     ... remote_path = /media/my_share/my_project
     ... eggs = pb.recipes.pydev
     ... """)
@@ -80,7 +80,7 @@ check that:
     ...             )[0]
     >>> data = paths_node.toxml()
 
-The paths should contain what we have specified int eh the `extra_paths` option:
+The paths should contain what we have specified int eh the `extra-paths` option:
 
     >>> '/something/else' in data
     True

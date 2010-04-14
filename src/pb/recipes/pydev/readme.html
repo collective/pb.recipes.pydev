@@ -332,7 +332,7 @@ to regenerate the project's module indexes.</p>
 ... [pydev]
 ... recipe = pb.recipes.pydev
 ... pydevproject_path = ${buildout:directory}/.pydevproject_test
-... extra_paths = /something/else
+... extra-paths = /something/else
 ... eggs = pb.recipes.pydev
 ... &quot;&quot;&quot;)
 </pre>
@@ -382,7 +382,7 @@ check that:</p>
 &gt;&gt;&gt; data = paths_node.toxml()
 </pre>
 </blockquote>
-<p>The paths should contain what we have specified int eh the <cite>extra_paths</cite> option:</p>
+<p>The paths should contain what we have specified in teh the <cite>extra-paths</cite> option:</p>
 <blockquote>
 <pre class="doctest-block">
 &gt;&gt;&gt; '/something/else' in data
