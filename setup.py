@@ -23,7 +23,7 @@ setup (
     author_email = "tibi@pixelblaster.ro", 
     license = "BSD", 
     keywords = "buildout recipe PyDev eclipse", 
-    url = 'http://svn.plone.org/svn/collective/pb.recipes.pydev/', 
+    url = 'https://github.com/collective/pb.recipes.pydev', 
     packages = find_packages('src'), 
     include_package_data = True, 
     package_dir = {'':'src'}, 
