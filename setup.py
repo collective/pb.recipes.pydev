@@ -14,7 +14,7 @@ setup (
     name=name, 
     description="Generates an Eclipse Pydev configuration file with path dependencies for an egg", 
     long_description = (
-                        read('README.txt') 
+                        read('README.rst') 
                         + "\n\n" +
                         read('CHANGES.txt')
     ), 
