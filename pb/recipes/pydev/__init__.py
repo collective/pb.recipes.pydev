@@ -23,7 +23,10 @@ class PyDev(object):
         self.buildout, self.name, self.options = buildout, name, options
         wd = self.buildout['buildout']['directory']
 
+        self._wd_path = wd
         self._use_sources_path = self.options.get('use_sources_path', False)
+        self._buildout_dir_is_source = self.options.get(
+                                               'buildout_dir_is_source', False)
         self._remote_path = self.options.get('remote_path', None)
         self._develop_path = os.path.normpath(os.path.join(wd, './src'))
 
@@ -80,8 +83,11 @@ class PyDev(object):
                          for p in egg_paths]
 
         # filter develop paths and egg paths
-        source_folder_paths = filter(lambda p: p.startswith(self._develop_path),
+        source_folder_paths = filter(lambda p: p.startswith(
+                                                           self._develop_path),
                                      egg_paths)
+        if self._buildout_dir_is_source:
+            source_folder_paths.append(self._wd_path)
         basepath = os.path.dirname(self.buildout['buildout']['directory'])
         source_folder_paths = [os.path.join(os.path.sep,
                                             os.path.relpath(each, basepath))
@@ -96,7 +102,6 @@ class PyDev(object):
 
         document = minidom.parse(self._fpath)
         project_node = document.getElementsByTagName('pydev_project')[0]
-
         self._add_path_nodes(document,
                              project_node,
                              'org.python.pydev.PROJECT_EXTERNAL_SOURCE_PATH',
